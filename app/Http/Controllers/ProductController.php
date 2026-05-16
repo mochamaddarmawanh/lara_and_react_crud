@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductStoreRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -21,15 +22,19 @@ class ProductController extends Controller
      */
     public function create(Product $product)
     {
-        //
+        return Inertia::render('products/create', []);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Product $product)
+    public function store(ProductStoreRequest $request)
     {
-        //
+        Product::create($request->validated());
+
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Product created successfully.');
     }
 
     /**
