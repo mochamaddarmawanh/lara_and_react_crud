@@ -12,39 +12,51 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/products',
     },
     {
-        title: 'Create',
-        href: '/products/create',
+        title: 'Edit',
+        href: '#',
     },
 ];
 
-export default function ProductCreate() {
-    const { data, setData, post, processing, errors } = useForm({
-        name: '',
-        price: '',
-        stock: '',
-        description: '',
+interface Props {
+    product: {
+        id: number;
+        encrypted_id: string;
+        name: string;
+        price: number;
+        stock: number;
+    };
+}
+
+export default function ProductEdit({
+    product,
+}: Props) {
+
+    const { data, setData, put, processing, errors } = useForm({
+        name: product.name,
+        price: product.price,
+        stock: product.stock,
     });
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        post('/products');
+        put(route('products.update', product.encrypted_id));
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create Product" />
+            <Head title="Edit Product" />
 
             <div className="p-6">
-                
+
                 {/* Header */}
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">
-                        Create Product
+                        Edit Product
                     </h1>
 
-                    <p className="text-sm text-muted-foreground">
-                        Add a new product to your inventory.
+                    <p className="mt-1 text-sm text-muted-foreground">
+                        Update product information.
                     </p>
                 </div>
 
@@ -65,7 +77,7 @@ export default function ProductCreate() {
                             onChange={(e) =>
                                 setData('name', e.target.value)
                             }
-                            className="w-full rounded-lg border border-input focus:border-gray-500 bg-background px-4 py-2 outline-none transition"
+                            className="w-full rounded-lg border border-input bg-background px-4 py-2 outline-none transition focus:border-gray-500"
                             placeholder="Enter product name"
                         />
 
@@ -86,9 +98,9 @@ export default function ProductCreate() {
                             type="number"
                             value={data.price}
                             onChange={(e) =>
-                                setData('price', e.target.value)
+                                setData('price', Number(e.target.value))
                             }
-                            className="w-full rounded-lg border border-input focus:border-gray-500 bg-background px-4 py-2 outline-none transition"
+                            className="w-full rounded-lg border border-input bg-background px-4 py-2 outline-none transition focus:border-gray-500"
                             placeholder="Enter price"
                         />
 
@@ -109,9 +121,9 @@ export default function ProductCreate() {
                             type="number"
                             value={data.stock}
                             onChange={(e) =>
-                                setData('stock', e.target.value)
+                                setData('stock', Number(e.target.value))
                             }
-                            className="w-full rounded-lg border border-input focus:border-gray-500 bg-background px-4 py-2 outline-none transition"
+                            className="w-full rounded-lg border border-input bg-background px-4 py-2 outline-none transition focus:border-gray-500"
                             placeholder="Enter stock"
                         />
 
@@ -122,32 +134,10 @@ export default function ProductCreate() {
                         )}
                     </div>
 
-                    {/* Description */}
-                    <div>
-                        <label className="mb-2 block text-sm font-medium">
-                            Description
-                        </label>
-
-                        <textarea
-                            value={data.description}
-                            onChange={(e) =>
-                                setData('description', e.target.value)
-                            }
-                            className="min-h-[120px] w-full rounded-lg border border-input focus:border-gray-500 bg-background px-4 py-2 outline-none transition"
-                            placeholder="Enter description"
-                        />
-
-                        {errors.description && (
-                            <p className="mt-1 text-sm text-red-500">
-                                {errors.description}
-                            </p>
-                        )}
-                    </div>
-
                     {/* Buttons */}
-                    <div className="flex items-center justify-end gap-3 pt-2">
+                    <div className="flex items-center justify-end gap-3">
                         <Link
-                            href="/products"
+                            href={route('products.index')}
                             className="rounded-lg border border-input px-4 py-2 text-sm font-medium transition hover:bg-muted"
                         >
                             Back
@@ -156,14 +146,16 @@ export default function ProductCreate() {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="rounded-lg bg-black px-5 py-2 text-sm font-medium text-white transition hover:opacity-90 disabled:opacity-50 dark:bg-white dark:text-black cursor-pointer"
+                            className="cursor-pointer rounded-lg bg-black px-5 py-2 text-sm font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-black"
                         >
-                            {processing ? 'Create Product' : 'Create Product'}
+                            {processing ? 'Updating...' : 'Update Product'}
                         </button>
                     </div>
 
                 </form>
+
             </div>
+
         </AppLayout>
     );
 }

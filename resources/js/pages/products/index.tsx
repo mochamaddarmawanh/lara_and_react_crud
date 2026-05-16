@@ -17,6 +17,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 interface Props {
     products: {
         id: number;
+        encrypted_id: string;
         name: string;
         price: number;
         stock: number;
@@ -88,6 +89,9 @@ export default function ProductIndex({ products, }: Props) {
                                 <th className="px-4 py-3 text-bold">
                                     Updated At
                                 </th>
+                                <th className="px-4 py-3 text-bold">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
 
@@ -120,6 +124,24 @@ export default function ProductIndex({ products, }: Props) {
 
                                         <td className="px-4 py-3 text-sm">
                                             {new Date(product.updated_at).toLocaleString('id-ID')}
+                                        </td>
+
+                                        <td className="whitespace-nowrap px-4 py-3">
+                                            <div className="flex items-center gap-2">
+                                                <Link
+                                                    href={route('products.edit', product.encrypted_id)}
+                                                    className="rounded-lg border border-blue-200 bg-blue-100 px-3 py-1.5 text-sm font-medium text-blue-700 transition hover:bg-blue-200 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-300"
+                                                >
+                                                    Edit
+                                                </Link>
+
+                                                <button
+                                                    type="button"
+                                                    className="cursor-pointer rounded-lg border border-red-200 bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 transition hover:bg-red-200 dark:border-red-900 dark:bg-red-950 dark:text-red-300"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))

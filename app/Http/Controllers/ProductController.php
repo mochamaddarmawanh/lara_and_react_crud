@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
 use App\Models\Product;
+use Illuminate\Support\Facades\Crypt;
 // use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -23,7 +24,12 @@ class ProductController extends Controller
             'created_at',
             'updated_at',
         ])
-        ->get();
+        ->get()
+        ->map(function ($product) {
+            $product->encrypted_id = Crypt::encryptString($product->id);
+
+            return $product;
+        });
 
         return Inertia::render('products/index', [
             'products' => $products,
@@ -61,10 +67,16 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    // public function edit(Product $product, Product $product)
-    // {
-    //     //
-    // }
+    public function edit(string $id)
+    {
+        $product_id = Crypt::decryptString($id);
+
+        $product = Product::findOrFail($product_id);
+
+        return Inertia::render('products/edit', [
+            'product' => $product,
+        ]);
+    }
 
     /**
      * Update the specified resource in storage.
