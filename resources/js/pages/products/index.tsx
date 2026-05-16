@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -31,6 +31,18 @@ export default function ProductIndex({ products, }: Props) {
             success?: string;
             error?: string;
         };
+    };
+
+    const handle_delete = (id: string) => {
+        const confirmed = confirm(
+            'Are you sure you want to delete this product?'
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        router.delete(route('products.destroy', id));
     };
 
     return (
@@ -136,6 +148,7 @@ export default function ProductIndex({ products, }: Props) {
 
                                                 <button
                                                     type="button"
+                                                    onClick={() => handle_delete(product.id)}
                                                     className="cursor-pointer rounded-lg border border-red-200 bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 transition hover:bg-red-200 dark:border-red-900 dark:bg-red-950 dark:text-red-300"
                                                 >
                                                     Delete

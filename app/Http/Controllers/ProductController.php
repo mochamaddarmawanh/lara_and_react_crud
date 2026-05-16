@@ -109,8 +109,16 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    // public function destroy(Product $product, Product $product)
-    // {
-    //     //
-    // }
+    public function destroy(string $id)
+    {
+        $product_id = Crypt::decryptString($id);
+
+        $product = Product::findOrFail($product_id);
+
+        $product->delete();
+
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Product deleted successfully.');
+    }
 }
