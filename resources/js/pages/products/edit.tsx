@@ -23,6 +23,7 @@ interface Props {
         name: string;
         price: number;
         stock: number;
+        description: string;
     };
 }
 
@@ -34,6 +35,7 @@ export default function ProductEdit({
         name: product.name,
         price: product.price,
         stock: product.stock,
+        description: product.description,
     });
 
     const submit = (e: React.FormEvent) => {
@@ -135,6 +137,28 @@ export default function ProductEdit({
                         {errors.stock && (
                             <p className="mt-1 text-sm text-red-500">
                                 {errors.stock}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Description */}
+                    <div>
+                        <label className="mb-2 block text-sm font-medium">
+                            Description
+                        </label>
+
+                        <textarea
+                            value={data.description}
+                            onChange={(e) =>
+                                setData('description', e.target.value)
+                            }
+                            className="min-h-[120px] w-full rounded-lg border border-input focus:border-gray-500 bg-background px-4 py-2 outline-none transition"
+                            placeholder="Enter description"
+                        />
+
+                        {errors.description && (
+                            <p className="mt-1 text-sm text-red-500">
+                                {errors.description}
                             </p>
                         )}
                     </div>
