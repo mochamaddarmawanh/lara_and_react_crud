@@ -19,8 +19,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface Props {
     product: {
-        id: number;
-        encrypted_id: string;
+        id: string;
         name: string;
         price: number;
         stock: number;
@@ -40,7 +39,7 @@ export default function ProductEdit({
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        put(route('products.update', product.encrypted_id));
+        put(route('products.update', product.id));
     };
 
     return (
@@ -148,7 +147,7 @@ export default function ProductEdit({
                             disabled={processing}
                             className="cursor-pointer rounded-lg bg-black px-5 py-2 text-sm font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-black"
                         >
-                            {processing ? 'Updating...' : 'Update Product'}
+                            {processing ? 'Update Product' : 'Update Product'}
                         </button>
                     </div>
 

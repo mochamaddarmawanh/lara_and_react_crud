@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use Illuminate\Support\Facades\Crypt;
 // use Illuminate\Http\Request;
@@ -16,20 +17,20 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::latest()
-        ->select([
-            'id',
-            'name',
-            'price',
-            'stock',
-            'created_at',
-            'updated_at',
-        ])
-        ->get()
-        ->map(function ($product) {
-            $product->encrypted_id = Crypt::encryptString($product->id);
+            ->select([
+                'id',
+                'name',
+                'price',
+                'stock',
+                'created_at',
+                'updated_at',
+            ])
+            ->get()
+            ->map(function ($product) {
+                $product->encrypted_id = Crypt::encryptString($product->id);
 
-            return $product;
-        });
+                return $product;
+            });
 
         return Inertia::render('products/index', [
             'products' => $products,
@@ -74,17 +75,30 @@ class ProductController extends Controller
         $product = Product::findOrFail($product_id);
 
         return Inertia::render('products/edit', [
-            'product' => $product,
+            'product' => [
+                'id' => $id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'stock' => $product->stock,
+            ]
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, Product $product, Product $product)
-    // {
-    //     //
-    // }
+    public function update(ProductUpdateRequest $request, string $id)
+    {
+        $product_id = Crypt::decryptString($id);
+
+        $product = Product::findOrFail($product_id);
+
+        $product->update($request->validated());
+
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Product updated successfully.');
+    }
 
     /**
      * Remove the specified resource from storage.
