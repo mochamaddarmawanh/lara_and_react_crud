@@ -27,9 +27,14 @@ class ProductController extends Controller
             ])
             ->get()
             ->map(function ($product) {
-                $product->encrypted_id = Crypt::encryptString($product->id);
-
-                return $product;
+                return [
+                    'id' => Crypt::encryptString($product->id),
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'stock' => $product->stock,
+                    'created_at' => $product->created_at,
+                    'updated_at' => $product->updated_at,
+                ];
             });
 
         return Inertia::render('products/index', [

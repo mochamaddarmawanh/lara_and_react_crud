@@ -16,8 +16,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface Props {
     products: {
-        id: number;
-        encrypted_id: string;
+        id: string;
         name: string;
         price: number;
         stock: number;
@@ -129,7 +128,7 @@ export default function ProductIndex({ products, }: Props) {
                                         <td className="whitespace-nowrap px-4 py-3">
                                             <div className="flex items-center gap-2">
                                                 <Link
-                                                    href={route('products.edit', product.encrypted_id)}
+                                                    href={route('products.edit', product.id)}
                                                     className="rounded-lg border border-blue-200 bg-blue-100 px-3 py-1.5 text-sm font-medium text-blue-700 transition hover:bg-blue-200 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-300"
                                                 >
                                                     Edit
