@@ -14,7 +14,18 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function ProductIndex() {
+interface Props {
+    products: {
+        id: number;
+        name: string;
+        price: number;
+        stock: number;
+        created_at: string;
+        updated_at: string;
+    }[],
+}
+
+export default function ProductIndex({ products, }: Props) {
     const { flash } = usePage().props as {
         flash?: {
             success?: string;
@@ -56,6 +67,75 @@ export default function ProductIndex() {
                         {flash.success}
                     </div>
                 )}
+
+                <div className="mt-6">
+                    <table className="w-full text-left">
+                        <thead>
+                            <tr>
+                                <th className="px-4 py-3 text-bold">#</th>
+                                <th className="px-4 py-3 text-bold">
+                                    Product Name
+                                </th>
+                                <th className="px-4 py-3 text-bold">
+                                    Price
+                                </th>
+                                <th className="px-4 py-3 text-bold">
+                                    Stock
+                                </th>
+                                <th className="px-4 py-3 text-bold">
+                                    Created At
+                                </th>
+                                <th className="px-4 py-3 text-bold">
+                                    Updated At
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {products.length > 0 ? (
+                                products.map((product, index) => (
+                                    <tr key={product.id}>
+                                        <td className="px-4 py-3 text-sm">
+                                            {index + 1}
+                                        </td>
+
+                                        <td className="px-4 py-3 font-medium">
+                                            {product.name}
+                                        </td>
+
+                                        <td className="px-4 py-3 text-sm">
+                                            Rp{' '}
+                                            {Number(product.price).toLocaleString(
+                                                'id-ID'
+                                            )}
+                                        </td>
+
+                                        <td className="px-4 py-3 text-sm">
+                                            {product.stock}
+                                        </td>
+
+                                        <td className="px-4 py-3 text-sm">
+                                            {new Date(product.created_at).toLocaleString('id-ID')}
+                                        </td>
+
+                                        <td className="px-4 py-3 text-sm">
+                                            {new Date(product.updated_at).toLocaleString('id-ID')}
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td
+                                        colSpan={5}
+                                        className="px-4 py-6 text-center text-sm text-muted-foreground"
+                                    >
+                                        No products found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
 

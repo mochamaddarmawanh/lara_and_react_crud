@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -12,9 +12,22 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Product $product)
+    public function index()
     {
-        return Inertia::render('products/index', []);
+        $products = Product::latest()
+        ->select([
+            'id',
+            'name',
+            'price',
+            'stock',
+            'created_at',
+            'updated_at',
+        ])
+        ->get();
+
+        return Inertia::render('products/index', [
+            'products' => $products,
+        ]);
     }
 
     /**
