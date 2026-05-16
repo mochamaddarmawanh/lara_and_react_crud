@@ -39,6 +39,12 @@ export default function ProductEdit({
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        const confirmed = confirm('Are you sure you want to update this product?');
+
+        if (!confirmed) {
+            return;
+        }
+
         put(route('products.update', product.id));
     };
 

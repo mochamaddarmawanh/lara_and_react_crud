@@ -28,6 +28,12 @@ export default function ProductCreate() {
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        const confirmed = confirm('Are you sure you want to create this product?');
+
+        if (!confirmed) {
+            return;
+        }
+
         post('/products');
     };
 
